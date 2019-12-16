@@ -14,6 +14,7 @@
 
 COLOR ?= always # Valid COLOR options: {always, auto, never}
 CARGO = cargo --color $(COLOR)
+TARGET = target/wasm32-unknown-unknown/debug
 
 .PHONY: all bench build check clean doc test update
 
@@ -24,7 +25,7 @@ bench:
 
 build:
 	@$(CARGO) build
-	wascap sign target/wasm32-unknown-unknown/debug/{{crate_name}}.wasm target/wasm32-unknown-unknown/debug/{{crate_name}}_s.wasm -a ./.keys/account.nk -m ./.keys/module.nk -s
+	wascap sign $(TARGET)/{{crate_name}}.wasm $(TARGET)/{{crate_name}}_signed.wasm -a ./.keys/account.nk -m ./.keys/module.nk -s
 
 check:
 	@$(CARGO) check
