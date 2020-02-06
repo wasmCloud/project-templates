@@ -18,7 +18,7 @@ use actor::prelude::*;
 
 actor_receive!(receive);
 
-pub fn receive(ctx: &CapabilitiesContext, operation: &str, msg: &[u8]) -> CallResult {    
+pub fn receive(ctx: &CapabilitiesContext, operation: &str, msg: &[u8]) -> ReceiveResult {    
     match operation {
         http::OP_HANDLE_REQUEST => hello_world(ctx, msg),
         core::OP_HEALTH_REQUEST => Ok(vec![]),
@@ -28,6 +28,6 @@ pub fn receive(ctx: &CapabilitiesContext, operation: &str, msg: &[u8]) -> CallRe
 
 fn hello_world(
    _ctx: &CapabilitiesContext,
-   _payload: impl Into<http::Request>) -> CallResult {
+   _payload: impl Into<http::Request>) -> ReceiveResult {
     Ok(protobytes(http::Response::ok())?)
 }
