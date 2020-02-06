@@ -14,8 +14,12 @@
 
 COLOR ?= always # Valid COLOR options: {always, auto, never}
 CARGO = cargo --color $(COLOR)
+TARGET = target/wasm32-unknown-unknown
+DEBUG = $(TARGET)/debug
+RELEASE = $(TARGET)/release
+KEYDIR ?= .keys
 
-.PHONY: all bench build check clean doc test update
+.PHONY: all bench build check clean doc test update keys keys-account keys-module
 
 all: build
 
@@ -24,7 +28,7 @@ bench:
 
 build:
 	@$(CARGO) build
-	wascap sign target/wasm32-unknown-unknown/debug/{{crate_name}}.wasm target/wasm32-unknown-unknown/debug/{{crate_name}}_s.wasm -a ./.keys/account.nk -m ./.keys/module.nk -s
+	wascap sign $(DEBUG)/{{crate_name}}.wasm $(DEBUG)/{{crate_name}}_signed.wasm -a $(KEYDIR)/account.nk -m $(KEYDIR)/module.nk -s
 
 check:
 	@$(CARGO) check
@@ -43,5 +47,17 @@ update:
 
 release:
 	@$(CARGO) build --release
-	wascap sign target/wasm32-unknown-unknown/release/{{crate_name}}.wasm target/wasm32-unknown-unknown/release/{{crate_name}}_s.wasm -a ./.keys/account.nk -m ./.keys/module.nk -s
+	wascap sign $(RELEASE)/{{crate_name}}.wasm $(RELEASE)/{{crate_name}}_s.wasm -a $(KEYDIR)/account.nk -m $(KEYDIR)/module.nk -s
 	
+keys: keys-account
+keys: keys-module
+
+keys-account:
+	@mkdir -p $(KEYDIR)
+	nk gen account > $(KEYDIR)/account.txt
+	awk '/Seed/{ print $$2 }' $(KEYDIR)/account.txt > $(KEYDIR)/account.nk
+
+keys-module:
+	@mkdir -p $(KEYDIR)
+	nk gen module > $(KEYDIR)/module.txt
+	awk '/Seed/{ print $$2 }' $(KEYDIR)/module.txt > $(KEYDIR)/module.nk
