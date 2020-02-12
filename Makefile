@@ -28,7 +28,7 @@ bench:
 
 build:
 	@$(CARGO) build
-	wascap sign $(DEBUG)/{{crate_name}}.wasm $(DEBUG)/{{crate_name}}_signed.wasm -a $(KEYDIR)/account.nk -m $(KEYDIR)/module.nk -s
+	wascap sign $(DEBUG)/{{crate_name}}.wasm $(DEBUG)/{{crate_name}}_signed.wasm -i $(KEYDIR)/account.nk -u $(KEYDIR)/module.nk -s -n {{crate_name}}
 
 check:
 	@$(CARGO) check
@@ -47,7 +47,7 @@ update:
 
 release:
 	@$(CARGO) build --release
-	wascap sign $(RELEASE)/{{crate_name}}.wasm $(RELEASE)/{{crate_name}}_s.wasm -a $(KEYDIR)/account.nk -m $(KEYDIR)/module.nk -s
+	wascap sign $(RELEASE)/{{crate_name}}.wasm $(RELEASE)/{{crate_name}}_s.wasm -i $(KEYDIR)/account.nk -u $(KEYDIR)/module.nk -s -n {{crate_name}}
 	
 keys: keys-account
 keys: keys-module
