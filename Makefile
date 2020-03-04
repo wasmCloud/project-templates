@@ -47,7 +47,7 @@ update:
 
 release:
 	@$(CARGO) build --release
-	wascap sign $(RELEASE)/{{crate_name}}.wasm $(RELEASE)/{{crate_name}}_s.wasm -i $(KEYDIR)/account.nk -u $(KEYDIR)/module.nk -s -n {{crate_name}}
+	wascap sign $(RELEASE)/{{crate_name}}.wasm $(RELEASE)/{{crate_name}}_signed.wasm -i $(KEYDIR)/account.nk -u $(KEYDIR)/module.nk -s -n {{crate_name}}
 	
 keys: keys-account
 keys: keys-module

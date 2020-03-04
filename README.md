@@ -11,6 +11,6 @@ To build your new module, use `make build`. This will compile your code with `ca
 
 - Cargo and Rust are required
 - Make is recommended, but not strictly necessary
-- [wascap](https://github.com/wascc/wascap) is required
+- [wascap](https://github.com/wascc/wascap) is required for signing actor modules
 - [nk](https://github.com/encabulators/nkeys) is required if you need to generate keys (which you almost certainly do)
 
