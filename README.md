@@ -1,4 +1,5 @@
 # New Actor Template
+
 Use cargo generate to create a new actor module from this template.
 
 [Learn how to write](https://wascc.dev/tutorials/first-actor/) waSCC actors, or [explore the actor concept](https://wascc.dev/docs/concepts/actors/).
