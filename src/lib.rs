@@ -20,7 +20,7 @@ actor_handlers! { codec::http::OP_HANDLE_REQUEST => hello_world,
                   codec::core::OP_HEALTH_REQUEST => health }
 
 fn hello_world(_payload: codec::http::Request) -> ReceiveResult {
-    Ok(serialize(http::Response::ok())?)
+    Ok(serialize(codec::http::Response::ok())?)
 }
 
 fn health(_req: codec::core::HealthRequest
