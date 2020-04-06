@@ -1,4 +1,4 @@
-// Copyright 2015-2019 Capital One Services, LLC
+// Copyright 2015-2020 Capital One Services, LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,18 +16,14 @@ extern crate wascc_actor as actor;
 
 use actor::prelude::*;
 
-actor_handlers! { http::OP_HANDLE_REQUEST => hello_world, 
-                  core::OP_HEALTH_REQUEST => health }
+actor_handlers! { codec::http::OP_HANDLE_REQUEST => hello_world, 
+                  codec::core::OP_HEALTH_REQUEST => health }
 
-fn hello_world(
-   _ctx: &CapabilitiesContext,
-   _payload: http::Request) -> ReceiveResult {
+fn hello_world(_payload: codec::http::Request) -> ReceiveResult {
     Ok(serialize(http::Response::ok())?)
 }
 
-fn health(
-    _ctx: &CapabilitiesContext,
-    _req: core::HealthRequest
+fn health(_req: codec::core::HealthRequest
 ) -> ReceiveResult {
     Ok(vec![])
 }
