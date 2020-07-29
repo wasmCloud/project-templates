@@ -13,3 +13,4 @@ wascc-actor = "0.7.1"
 [profile.release]
 # Optimize for small code size
 opt-level = "s"
+lto = true
