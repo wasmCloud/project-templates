@@ -12,7 +12,7 @@ all: build
 build:
 	@$(CARGO) build
 	VERSION=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[].version')
-    wash claims sign $(DEBUG)/{{crate_name}}.wasm -q --name "New Actor" --ver $VERSION --rev 0	
+    wash claims sign $(DEBUG)/{{crate_name}}.wasm -c wasmcloud:httpserver --name "{{crate_name}}" --ver $VERSION --rev 0
 
 check:
 	@$(CARGO) check
@@ -32,4 +32,4 @@ update:
 release:
 	@$(CARGO) build --release
 	VERSION=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[].version')
-    wash claims sign $(RELEASE)/{{crate_name}}.wasm -q --name "New Actor" --ver $VERSION --rev 0
+    wash claims sign $(RELEASE)/{{crate_name}}.wasm -c wasmcloud:httpserver --name "{{crate_name}}" --ver $VERSION --rev 0
