@@ -3,7 +3,7 @@
 Use cargo generate to create a new actor module from this template:
 
 ```
-cargo generate --git https://github.com/wasmCloud/new-actor-template
+cargo generate --git https://github.com/wasmcloud/new-actor-template --branch main
 ```
 
 Use the `wash` CLI to sign your WebAssembly module after you have created it. The `Makefile` created by this template will sign your module for you with `make build` and `make release`.
@@ -14,7 +14,7 @@ You should modify this `Makefile` after creation to have the right actor name, r
 
 - Cargo and Rust are required
 - Make is recommended, but not strictly necessary
-- [wash](https://github.com/wasmCloud/wash) - wasmCloud's multi-purpose CLI
+- [wash](https://github.com/wasmcloud/wash) - wasmcloud's multi-purpose CLI
 
 ### Note
 
