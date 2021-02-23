@@ -9,7 +9,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 wapc-guest = "0.4.0"
-actor-core = { git = "https://github.com/wasmCloud/actor-interfaces", branch = "main", features = ["guest"] }
+wasmcloud-actor-core = { version = "0.2.2", features = ["guest"] }
 
 [profile.release]
 # Optimize for small code size
