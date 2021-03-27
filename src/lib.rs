@@ -1,4 +1,4 @@
-extern crate wapc_guest as guest;
+use wapc_guest as guest;
 use wasmcloud_actor_core as actor;
 
 use guest::prelude::*;
