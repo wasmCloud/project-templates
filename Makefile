@@ -23,12 +23,16 @@ clean:
 doc:
 	@$(CARGO) doc
 
+inspect:
+	wash claims inspect $(RELEASE)/{{crate_name}}_s.wasm
+
+release:
+	@$(CARGO) build --release	
+	wash claims sign $(RELEASE)/{{crate_name}}.wasm -c wasmcloud:httpserver --name "{{crate_name}}" --ver $(VERSION) --rev 0
+	wash claims inspect $(RELEASE)/{{crate_name}}_s.wasm
+
 test: build
 	@$(CARGO) test
 
 update:
 	@$(CARGO) update
-
-release:
-	@$(CARGO) build --release	
-	wash claims sign $(RELEASE)/{{crate_name}}.wasm -c wasmcloud:httpserver --name "{{crate_name}}" --ver $(VERSION) --rev 0
