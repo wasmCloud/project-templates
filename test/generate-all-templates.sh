@@ -35,10 +35,9 @@ function test_template () {
     fi
 }
 
-test_template actor     my-echo  $src_dir/actor/echo
 test_template actor     my-hello $src_dir/actor/hello
+test_template actor     my-echo  $src_dir/actor/echo
 test_template interface my-ifa   $src_dir/interface/converter-actor
-test_template interface my-ifp   $src_dir/interface/converter-provider
 test_template interface my-iff   $src_dir/interface/factorial
 test_template provider  my-pr1   $src_dir/provider/factorial
 

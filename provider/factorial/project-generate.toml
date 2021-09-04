@@ -9,5 +9,3 @@ type = "string"
 prompt = "Vendor name?"
 default = "Acme"
 
-
-

@@ -21,7 +21,7 @@ regex = "^([a-z][a-z0-9_.]+)$"
 name = "contract_id"
 type = "string"
 prompt = "Capability contract name?"
-default = "example::interfaces::{{to_snake_case interface}}"
+default = "example:interfaces:{{to_snake_case interface}}"
 regex = "^([a-z][a-z0-9_.:]+)$"
 
 
