@@ -1,6 +1,6 @@
 [template]
 rename = [
-  { from="converter.smithy", to="{{to_snake_case interface}}.smithy" }
+  { from="converter.smithy", to="{{to_snake_case interface}}.smithy" },
 ]
 
 [[placeholders]]
@@ -16,6 +16,5 @@ type = "string"
 prompt = "Namespace prefix?"
 default = "org.example.interfaces"
 regex = "^([a-z][a-z0-9_.]+)$"
-
 
 

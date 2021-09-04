@@ -1,6 +1,6 @@
 [template]
 rename = [
-  { from="tests/factorial_test.rs", to="tests/{{to_snake_case project-name}}_test.rs" }
+  { from="tests/factorial_test.rs", to="tests/{{to_snake_case project-name}}_test.rs" },
 ]
 
 [[placeholders]]

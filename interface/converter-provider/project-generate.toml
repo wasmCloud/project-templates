@@ -1,6 +1,6 @@
 [template]
 rename = [
-  { from="converter.smithy", to="{{to_snake_case interface}}.smithy" }
+  { from="converter.smithy", to="{{to_snake_case interface}}.smithy" },
 ]
 
 [[placeholders]]

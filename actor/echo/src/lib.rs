@@ -9,11 +9,11 @@ struct {{to_pascal_case project-name}}Actor {}
 /// Implementation of HttpServer trait methods
 #[async_trait]
 impl HttpServer for {{to_pascal_case project-name}}Actor {
-    async fn handle_request(&self, _ctx: &Context, value: &HttpRequest) -> RpcResult<HttpResponse> {
+    async fn handle_request(&self, _ctx: &Context, req: &HttpRequest) -> RpcResult<HttpResponse> {
         let body = json!({
-            "method": &value.method,
-            "path": &value.path,
-            "query_string": &value.query_string,
+            "method": &req.method,
+            "path": &req.path,
+            "query_string": &req.query_string,
             "body": b"".to_vec(),
         });
         let resp = HttpResponse {

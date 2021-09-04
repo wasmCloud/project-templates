@@ -13,7 +13,8 @@ top_targets     ?= all build par clean
 platform_id = $(shell uname -s)
 platform = $$( \
 	case $(platform_id) in \
-		( Linux | Darwin ) echo $(platform_id) ;; \
+		( Linux ) echo $(platform_id) ;; \
+		( Darwin ) echo $(platform_id) ;; \
 		( * ) echo Unrecognized Platform;; \
 	esac )
 
@@ -39,10 +40,20 @@ endif
 par_targets ?= \
 	x86_64-unknown-linux-gnu \
    	x86_64-apple-darwin \
-	armv7-unknown-linux-gnueabihf \
    	aarch64-unknown-linux-gnu \
    	aarch64-apple-darwin \
+	armv7-unknown-linux-gnueabihf \
    	x86_64-pc-windows-gnu
+
+# Lookup table from rust target triple to wasmcloud architecture doubles
+# Thanks to https://stackoverflow.com/a/40919906 for the pointer to
+# "constructed macro names".
+ARCH_LOOKUP_x86_64-unknown-linux-gnu=x86_64-linux
+ARCH_LOOKUP_x86_64-apple-darwin=x86_64-macos
+ARCH_LOOKUP_armv7-unknown-linux-gnueabihf=arm-linux
+ARCH_LOOKUP_aarch64-unknown-linux-gnu=aarch64-linux
+ARCH_LOOKUP_aarch64-apple-darwin=aarch64-macos
+ARCH_LOOKUP_x86_64-pc-windows-gnu=x86_64-windows
 
 bin_targets = $(foreach target,$(par_targets),target/$(target)/release/$(bin_name))
 
@@ -80,9 +91,8 @@ par:: $(dest_par)
 # rebuild base par if target0 changes
 $(dest_par): $(bin_target0) Makefile Cargo.toml
 	@mkdir -p $(dir $(dest_par))
-	par_arch=`echo $(par_target0) | sed -E 's/([^-]+)-([^-]+)-([^-]+)(-gnu)?/\1-\3/'`
 	$(WASH) par create \
-		--arch $$par_arch \
+		--arch $(ARCH_LOOKUP_$(par_target0)) \
 		--binary $(bin_target0) \
 		--capid $(CAPABILITY_ID) \
 		--name $(NAME) \
@@ -93,16 +103,17 @@ $(dest_par): $(bin_target0) Makefile Cargo.toml
 		--compress
 	@echo Created $@
 
-
 # par-full adds all the other targets to the base par
 par-full: $(dest_par) $(bin_targets)
-	# add other defined targets
 	for target in $(par_targets); do \
-	    target_dest=target/$$target/release/$(bin_name);  \
-	    par_arch=`echo -n $$target | sed -E 's/([^-]+)-([^-]+)-([^-]+)(-gnu)?/\1-\3/'`; \
+	    target_dest=target/$${target}/release/$(bin_name);  \
+		if [ $$target = "x86_64-pc-windows-gnu" ]; then \
+			target_dest=$$target_dest.exe;  \
+		fi; \
+	    par_arch=`echo -n $$target | sed -E 's/([^-]+)-([^-]+)-([^-]+)(-gnu.*)?/\1-\3/' | sed 's/darwin/macos/'`; \
 		echo building $$par_arch; \
-		if [ $${target_dest} != $(cross_target0) ] && [ -f $$target_dest ]; then \
-		    $(WASH) par insert --arch $$par_arch --binary $$target_dest $@; \
+		if [ $$target_dest != $(cross_target0) ] && [ -f $$target_dest ]; then \
+		    $(WASH) par insert --arch $$par_arch --binary $$target_dest $(dest_par); \
 		fi; \
 	done
 
@@ -118,9 +129,10 @@ target/release/$(bin_name): $(RUST_DEPS)
 target/debug/$(bin_name): $(RUST_DEPS)
 	cargo build
 
-# cross-compile target
+# cross-compile target, remove intermediate build artifacts before build
 target/%/release/$(bin_name): $(RUST_DEPS)
 	tname=`echo -n $@ | sed -E 's_target/([^/]+)/release.*$$_\1_'` &&\
+	rm -rf target/release/build &&\
 	cross build --release --target $$tname
 
 endif
@@ -128,6 +140,8 @@ endif
 # push par file to registry
 push: $(dest_par)
 	$(WASH) reg push $(oci_insecure) $(oci_url) $(dest_par)
+
+
 
 
 # start provider
@@ -145,7 +159,7 @@ inventory:
 	$(WASH) ctl get inventory $(shell $(WASH) ctl get hosts -o json | jq -r ".hosts[0].id")
 
 clean::
-	rm -f build/
+	rm -rf build/
 
 ifeq ($(wildcard ./Cargo.toml),./Cargo.toml)
 build::
@@ -154,10 +168,27 @@ build::
 release::
 	cargo build --release
 
+# cargo test runss whatever tests are available
+# including provider integration tests (with provider_test_config.toml and tests/ subfolder)
+test::
+	cargo test -- --nocapture
+
 clean::
 	cargo clean
-	cross clean
+	cross clean || echo
 endif
+
+ifeq ($(wildcard codegen.toml),codegen.toml)
+# if there are interfaces here, enable lint and validate rules
+lint validate::
+	$(WASH) $@
+else
+lint validate::
+
+endif
+
+install-cross: ## Helper function to install the proper `cross` version
+	cargo install --git https://github.com/ChrisRx/cross --branch add-darwin-target --force
 
 
 # for debugging - show variables make is using

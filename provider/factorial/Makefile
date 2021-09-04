@@ -9,6 +9,3 @@ REVISION = 0
 
 include ./provider.mk
 
-test:
-	cargo test -- --nocapture
-
