@@ -6,6 +6,7 @@ edition = "2018"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
+name = "{{to_snake_case project-name}}"
 
 [dependencies]
 async-trait = "0.1"
