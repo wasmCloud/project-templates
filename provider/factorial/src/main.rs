@@ -18,6 +18,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 /// {{ project-name }} capability provider implementation
 #[derive(Default, Clone, Provider)]
+#[services(Factorial)]
 struct {{ to_pascal_case project-name }}Provider {}
 
 /// use default implementations of provider message handlers
