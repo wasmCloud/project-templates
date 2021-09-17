@@ -1,8 +1,7 @@
 //! {{ project-name }} capability provider
 //!
 //!
-#[allow(unused_imports)]
-use log::{debug, error, info, trace, warn};
+use log::debug;
 use wasmbus_rpc::provider::prelude::*;
 use wasmcloud_interface_factorial::{Factorial, FactorialReceiver};
 
@@ -18,12 +17,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 /// {{ project-name }} capability provider implementation
-#[derive(Default, Clone)]
+#[derive(Default, Clone, Provider)]
 struct {{ to_pascal_case project-name }}Provider {}
 
 /// use default implementations of provider message handlers
 impl ProviderDispatch for {{ to_pascal_case project-name }}Provider {}
-impl FactorialReceiver for {{ to_pascal_case project-name }}Provider {}
 impl ProviderHandler for {{ to_pascal_case project-name }}Provider {}
 
 /// Handle Factorial methods
@@ -31,6 +29,7 @@ impl ProviderHandler for {{ to_pascal_case project-name }}Provider {}
 impl Factorial for {{ to_pascal_case project-name }}Provider {
     /// accepts a number and calculates its factorial
     async fn calculate(&self, _ctx: &Context, req: &u32) -> RpcResult<u64> {
+        debug!("processing request calculat({})", *req);
         Ok(n_factorial(*req))
     }
 }
@@ -48,28 +47,5 @@ fn n_factorial(n: u32) -> u64 {
             }
             result
         }
-    }
-}
-
-/// Handle incoming rpc messages and dispatch to applicable trait handler.
-#[async_trait]
-impl MessageDispatch for {{ to_pascal_case project-name }}Provider {
-    async fn dispatch(&self, ctx: &Context, message: Message<'_>) -> RpcResult<Message<'_>> {
-        let op = match message.method.split_once('.') {
-            Some((cls, op)) if cls == "Factorial" => op,
-            None => message.method,
-            _ => {
-                return Err(RpcError::MethodNotHandled(message.method.to_string()));
-            }
-        };
-        FactorialReceiver::dispatch(
-            self,
-            ctx,
-            &Message {
-                method: op,
-                arg: message.arg,
-            },
-        )
-        .await
     }
 }

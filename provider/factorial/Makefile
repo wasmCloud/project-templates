@@ -1,6 +1,6 @@
 # {{ project-name }} Makefile
 
-CAPABILITY_ID = "wasmcloud:example:factorial"
+CAPABILITY_ID = "wasmcloud:example:{{to_snake_case project-name}}"
 NAME = "{{ project-name }}"
 VENDOR = "{{ vendor_name }}"
 PROJECT = {{ to_snake_case project-name }}
