@@ -38,6 +38,7 @@ TARGET_DIR ?= target
 # location of wasm file after build and signing
 DIST_WASM ?= build/$(PROJECT)_s.wasm
 WASM_TARGET ?= wasm32-unknown-unknown
+ACTOR_NAME  ?= $(PROJECT)
 UNSIGNED_WASM = $(TARGET_DIR)/$(WASM_TARGET)/release/$(PROJECT).wasm
 
 # verify all required variables are set
@@ -58,9 +59,17 @@ $(DIST_WASM): $(UNSIGNED_WASM) Makefile
 	@mkdir -p $(dir $@)
 	$(WASH) claims sign $< \
 		$(foreach claim,$(CLAIMS), -c $(claim) ) \
-		--name "$(PROJECT)" --ver $(VERSION) --rev $(REVISION) \
+		--name $(ACTOR_NAME) --ver $(VERSION) --rev $(REVISION) \
+		$(if $(ACTOR_ALIAS),--call-alias $(ACTOR_ALIAS)) \
 		--destination $@
 
+# rules to print file name and path of build target
+target-path:
+	@echo $(DIST_WASM)
+target-path-abs:
+	@echo $(abspath $(DIST_WASM))
+target-file:
+	@echo $(notdir $(DIST_WASM))
 
 # the wasm should be rebuilt if any source files change
 $(UNSIGNED_WASM): $(RUST_DEPS)
@@ -91,9 +100,10 @@ ifneq ($(wildcard test-options.json),)
 # if this is a test actor, run its start method
 # project makefile can set RPC_TEST_TIMEOUT to override default
 RPC_TEST_TIMEOUT ?= 2
-ACTOR_ID=$(shell make --silent actor_id)
 test::
-	$(WASH) call $(ACTOR_ID) --test --data test-options.json --rpc-timeout $(RPC_TEST_TIMEOUT) Start
+	$(WASH) call --test --data test-options.json --rpc-timeout $(TEST_TIMEOUT) \
+	    $(shell make --silent actor_id) \
+	    Start
 endif
 
 # generate release build
