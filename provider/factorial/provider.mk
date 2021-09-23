@@ -8,7 +8,7 @@
 # top_targets      # list of targets that are applicable for this project
 #
 
-top_targets     ?= all build par clean
+top_targets     ?= all par par-full test clean 
 
 platform_id = $(shell uname -s)
 platform = $$( \
@@ -23,10 +23,9 @@ machine_id = $(shell uname -m )
 # name of compiled binary
 bin_name ?= $(PROJECT)
 dest_par ?= build/$(bin_name).par.gz
-
 link_name ?= default
 
-# If name is not defined, used project
+# If name is not defined, use project
 NAME ?= $(PROJECT)
 
 WASH ?= wash
@@ -79,7 +78,7 @@ bin_target0=target/release/$(bin_name)
 ifneq ($(subdirs),)
 $(top_targets)::
 	for dir in $(subdirs); do \
-		$(MAKE) -C $$dir $@ weld=$(weld); \
+		$(MAKE) -C $$dir $@ ; \
 	done
 endif
 
@@ -137,12 +136,18 @@ target/%/release/$(bin_name): $(RUST_DEPS)
 
 endif
 
+# rules to print file name and path of build target
+target-path:
+	@echo $(dest_par)
+target-path-abs:
+	@echo $(abspath $(dest_par))
+target-file:
+	@echo $(notdir $(dest_par))
+
+
 # push par file to registry
 push: $(dest_par)
 	$(WASH) reg push $(oci_insecure) $(oci_url) $(dest_par)
-
-
-
 
 # start provider
 start:
@@ -158,8 +163,13 @@ inspect: $(dest_par)
 inventory:
 	$(WASH) ctl get inventory $(shell $(WASH) ctl get hosts -o json | jq -r ".hosts[0].id")
 
+
+# clean: remove built par files, but don't clean if we're in top-level dir
+ifeq ($(wildcard build/makefiles),)
 clean::
 	rm -rf build/
+endif
+
 
 ifeq ($(wildcard ./Cargo.toml),./Cargo.toml)
 build::
@@ -168,24 +178,12 @@ build::
 release::
 	cargo build --release
 
-# cargo test runss whatever tests are available
-# including provider integration tests (with provider_test_config.toml and tests/ subfolder)
-test::
-	cargo test -- --nocapture
-
 clean::
 	cargo clean
-	cross clean || echo
-endif
-
-ifeq ($(wildcard codegen.toml),codegen.toml)
-# if there are interfaces here, enable lint and validate rules
-lint validate::
-	$(WASH) $@
-else
-lint validate::
+	if command -v cross; then cross clean; fi
 
 endif
+
 
 install-cross: ## Helper function to install the proper `cross` version
 	cargo install --git https://github.com/ChrisRx/cross --branch add-darwin-target --force
@@ -193,7 +191,6 @@ install-cross: ## Helper function to install the proper `cross` version
 
 # for debugging - show variables make is using
 make-vars:
-	@echo "weld:          : $(weld)"
 	@echo "platform_id    : $(platform_id)"
 	@echo "platform       : $(platform)"
 	@echo "machine_id     : $(machine_id)"
@@ -207,4 +204,4 @@ make-vars:
 	@echo "REVISION       : $(REVISION)"
 
 
-.PHONY: all build release par clean test $(weld)
+.PHONY: all par par-full test clean
