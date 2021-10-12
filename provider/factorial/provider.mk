@@ -110,7 +110,7 @@ par-full: $(dest_par) $(bin_targets)
 		if [ $$target = "x86_64-pc-windows-gnu" ]; then \
 			target_dest=$$target_dest.exe;  \
 		fi; \
-	    par_arch=`echo -n $$target | sed -E 's/([^-]+)-([^-]+)-([^-]+)(-gnu.*)?/\1-\3/' | sed 's/darwin/macos/'`; \
+	    par_arch=`printf $$target | sed -E 's/([^-]+)-([^-]+)-([^-]+)(-gnu.*)?/\1-\3/' | sed 's/darwin/macos/'`; \
 		echo building $$par_arch; \
 		if [ $$target_dest != $(cross_target0) ] && [ -f $$target_dest ]; then \
 		    $(WASH) par insert --arch $$par_arch --binary $$target_dest $(dest_par); \
@@ -131,7 +131,7 @@ target/debug/$(bin_name): $(RUST_DEPS)
 
 # cross-compile target, remove intermediate build artifacts before build
 target/%/release/$(bin_name): $(RUST_DEPS)
-	tname=`echo -n $@ | sed -E 's_target/([^/]+)/release.*$$_\1_'` &&\
+	tname=`printf $@ | sed -E 's_target/([^/]+)/release.*$$_\1_'` &&\
 	rm -rf target/release/build &&\
 	cross build --release --target $$tname
 
