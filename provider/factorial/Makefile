@@ -9,3 +9,6 @@ REVISION = 0
 
 include ./provider.mk
 
+test::
+	cargo clippy --all-targets --all-features
+
