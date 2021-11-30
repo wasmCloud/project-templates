@@ -17,3 +17,5 @@ ACTOR_NAME = "{{project-name}}"
 
 include ./actor.mk
 
+test::
+	cargo clippy --all-features --all-targets
