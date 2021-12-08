@@ -12,10 +12,8 @@ name = "{{to_snake_case project-name}}"
 async-trait = "0.1"
 futures = "0.3"
 form_urlencoded = "1.0"
-serde_bytes = "0.11"
-serde = {version = "1.0", features = ["derive"]}
-wasmbus-rpc = "0.5"
-wasmcloud-interface-httpserver = "0.2"
+wasmbus-rpc = "0.6"
+wasmcloud-interface-httpserver = "0.3"
 
 [profile.release]
 # Optimize for small code size
