@@ -10,14 +10,10 @@ name = "{{to_snake_case project-name}}"
 
 [dependencies]
 async-trait = "0.1"
-console_log = "0.2"
 futures = "0.3"
-log = "0.4"
-serde_bytes = "0.11"
 serde_json ="1.0"
-serde = {version = "1.0", features = ["derive"]}
-wasmbus-rpc = "0.5"
-wasmcloud-interface-httpserver = "0.2"
+wasmbus-rpc = "0.6"
+wasmcloud-interface-httpserver = "0.3"
 
 [profile.release]
 # Optimize for small code size
