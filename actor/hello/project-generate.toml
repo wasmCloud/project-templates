@@ -4,4 +4,8 @@ exclude = [
   "/.idea"
 ]
 
+ignore = [
+  ".github/workflows"
+]
+
 

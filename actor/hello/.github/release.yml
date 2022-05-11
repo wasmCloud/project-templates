@@ -10,7 +10,7 @@ on:
     tags:
       - "hello-v*"
 env:
-  PROJECT_NAME: {{ project-name }}
+  PROJECT_NAME: hello
   # For the release action, you'll have to set the following variables
   WASH_ISSUER_KEY: ${{ secrets.WASH_ISSUER_KEY }}
   WASH_SUBJECT_KEY: ${{ secrets.WASH_ISSUER_KEY }}
