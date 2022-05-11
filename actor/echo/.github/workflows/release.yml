@@ -8,9 +8,8 @@ on:
       - "src/**"
       - "Cargo.*"
     tags:
-      - "echo-v*"
+      - "v*"
 env:
-  PROJECT_NAME: echo
   # For the release action, you'll have to set the following variables
   WASH_ISSUER_KEY: ${{ secrets.WASH_ISSUER_KEY }}
   WASH_SUBJECT_KEY: ${{ secrets.WASH_SUBJECT_KEY }}
@@ -79,17 +78,20 @@ jobs:
         with:
           name: wasmcloud-actor
           path: build
+      - name: Determine actor name
+        run: |
+          echo "actor-name=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[].name')" >> $GITHUB_ENV
       - name: Determine actor version
         if: startswith(github.ref, 'refs/tags/') # Only run on tag push
         run: |
-          echo "oci-version=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[].version')" >> $GITHUB_ENV
+          echo "actor-version=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[].version')" >> $GITHUB_ENV
       - name: Determine actor version (main)
         if: ${{ !startswith(github.ref, 'refs/tags/') }}
         run: |
-          echo "oci-version=latest" >> $GITHUB_ENV
+          echo "actor-version=latest" >> $GITHUB_ENV
       - name: Push actor to GHCR
         env:
           WASH_REG_USER: ${{ github.repository_owner }}
           WASH_REG_PASSWORD: ${{ secrets.WASMCLOUD_PAT }}
         run: |
-          wash reg push ghcr.io/${{ github.REPOSITORY }}:${{ env.oci-version }} build/${{ env.PROJECT_NAME }}_s.wasm -a org.opencontainers.image.source=https://github.com/${{ github.REPOSITORY }} --allow-latest
+          wash reg push ghcr.io/${{ github.REPOSITORY }}:${{ env.actor-version }} build/${{ env.actor-name }}_s.wasm -a org.opencontainers.image.source=https://github.com/${{ github.REPOSITORY }} --allow-latest
