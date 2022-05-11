@@ -84,6 +84,7 @@ jobs:
         run: |
           echo "oci-version=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[].version')" >> $GITHUB_ENV
       - name: Determine actor version (main)
+        if: ${{ !startswith(github.ref, 'refs/tags/') }}
         run: |
           echo "oci-version=latest" >> $GITHUB_ENV
       - name: Push actor to GHCR
@@ -91,4 +92,4 @@ jobs:
           WASH_REG_USER: ${{ github.repository_owner }}
           WASH_REG_PASSWORD: ${{ secrets.WASMCLOUD_PAT }}
         run: |
-          wash reg push ghcr.io/${{ github.REPOSITORY }}:${{ env.oci-version }} build/${{ env.PROJECT_NAME }}_s.wasm -a org.opencontainers.image.source=https://github.com/${{ github.REPOSITORY }}
+          wash reg push ghcr.io/${{ github.REPOSITORY }}:${{ env.oci-version }} build/${{ env.PROJECT_NAME }}_s.wasm -a org.opencontainers.image.source=https://github.com/${{ github.REPOSITORY }} --allow-latest
