@@ -1,5 +1,9 @@
 [template]
 
+raw = [
+  ".github/workflows/build.yml",
+  ".github/workflows/release.yml",
+]
 exclude = [
   "/.idea"
 ]

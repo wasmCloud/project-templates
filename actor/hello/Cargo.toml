@@ -9,7 +9,6 @@ crate-type = ["cdylib", "rlib"]
 name = "{{to_snake_case project-name}}"
 
 [dependencies]
-async-trait = "0.1"
 futures = "0.3"
 form_urlencoded = "1.0"
 wasmbus-rpc = "0.8.2"
