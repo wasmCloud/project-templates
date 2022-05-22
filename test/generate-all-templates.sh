@@ -35,6 +35,7 @@ function test_template() {
 }
 
 test_template actor my-hello "$src_dir/actor/hello"
+test_template actor my-hello-tinygo "$src_dir/actor/echo-tinygo"
 test_template actor my-echo "$src_dir/actor/echo"
 test_template interface my-ifa "$src_dir/interface/converter-actor"
 test_template interface my-iff "$src_dir/interface/factorial"
