@@ -30,6 +30,9 @@ push: ${MODULE}
 start:
 	wash ctl start actor ${OCI_URL}
 
+test:
+	echo Insert tests here
+
 # start httpserver provider
 provider:
 	wash ctl start provider wasmcloud.azurecr.io/httpserver:0.15.0
@@ -63,4 +66,4 @@ host-id:
 _actor_id: ${MODULE}
 	wash claims inspect ${MODULE} -o json | jq -r .module | tail -1
 
-.PHONY: actor-id _actor_id bump clean inventory push start
+.PHONY: actor-id _actor_id bump clean inventory push start test
