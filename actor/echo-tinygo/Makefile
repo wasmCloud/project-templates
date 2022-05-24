@@ -14,7 +14,7 @@ wasm: ${MODULE}
 
 ${MODULE}: ${UNSIGNED} Makefile
 	@mkdir -p $(shell dirname $@)
-	wash claims sign $< --destination $@ --name ${NAME} ${CLAIMS}
+	wash claims sign $< --destination $@ --name ${NAME} ${CLAIMS} -v ${VERSION}
 
 ${UNSIGNED}: $(wildcard *.go) go.mod Makefile
 	@mkdir -p $(shell dirname $@)
@@ -65,5 +65,8 @@ host-id:
 
 _actor_id: ${MODULE}
 	wash claims inspect ${MODULE} -o json | jq -r .module | tail -1
+
+_actor_name:
+	@echo ${NAME}
 
 .PHONY: actor-id _actor_id bump clean inventory push start test
