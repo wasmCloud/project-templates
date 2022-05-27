@@ -20,9 +20,3 @@ func (e *{{to_pascal_case project-name}}) HandleRequest(ctx *actor.Context, req 
 	}
 	return &r, nil
 }
-
-func (e *{{to_pascal_case project-name}}) HealthRequest(ctx *actor.Context, arg actor.HealthCheckRequest) (*actor.HealthCheckResponse, error) {
-	var r actor.HealthCheckResponse
-	r.Healthy = true
-	return &r, nil
-}
