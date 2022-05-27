@@ -7,7 +7,7 @@ import (
 
 func main() {
 	me := {{to_pascal_case project-name}}{}
-	actor.RegisterHandlers(httpserver.HttpServerHandler(&me), actor.ActorHandler(&me))
+	actor.RegisterHandlers(httpserver.HttpServerHandler(&me))
 }
 
 type {{to_pascal_case project-name}} struct{}
