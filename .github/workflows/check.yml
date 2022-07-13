@@ -29,7 +29,9 @@ jobs:
             toolchain: tinygo
           - project: actor/hello
             toolchain: rust
-          - project: interface/rust
+          - project: interface/converter-actor
+            toolchain: rust
+          - project: interface/factorial
             toolchain: rust
           - project: provider/factorial
             toolchain: rust
