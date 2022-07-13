@@ -39,7 +39,7 @@ jobs:
       - uses: wasmcloud/common-actions/install-wash@main
       # Setup build toolchains
       - name: Add wasm32-unknown-unknown
-        if: ${{ startswith(matrix.toolchain, 'rust') && startswith(matrix.project, 'actor') }} # Windows gets angry about not owning files if you restore from cache
+        if: ${{ startswith(matrix.toolchain, 'rust') }}
         run: rustup target add wasm32-unknown-unknown
       - name: Setup tinygo
         if: ${{ startswith(matrix.toolchain, 'tinygo') }}
