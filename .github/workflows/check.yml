@@ -10,7 +10,7 @@ jobs:
   check_projects:
     runs-on: ubuntu-latest
     env:
-      TEST_FOLDER: project_template_test
+      TEST_FOLDER: project-template-test
     strategy:
       matrix:
         project:
