@@ -7,7 +7,7 @@ For each http request, the actor returns a json-formatted
 string containing fields from the request.
 
 ### Using the included Github Actions
-If you store your source code on Github, we've gone ahead and included two actions: `build.yml` and `release.yml` under `.github/workflows`. The build action will automatically build, lint, and check formatting for your actor. The release action will automatically release a new version of your actor whenever code is pushed to `main`, or when you push a tag with the form `hello-vX.Y.Z`. 
+If you store your source code on Github, we've gone ahead and included two actions: `build.yml` and `release.yml` under `.github/workflows`. The build action will automatically build, lint, and check formatting for your actor. The release action will automatically release a new version of your actor whenever code is pushed to `main`, or when you push a tag with the form `vX.Y.Z`. 
 
 These actions require 3 secrets
 1. `WASH_ISSUER_KEY`, which can be generated with `wash keys gen issuer`, then look for the 56 character `Seed` value
