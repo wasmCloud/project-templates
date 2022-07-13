@@ -1,0 +1,67 @@
+name: Ensure templates are valid and build successfully
+on:
+  pull_request:
+    branches: [main]
+    # paths:
+    #   - "actor/**"
+    #   - "interface/**"
+    #   - "provider/**"
+jobs:
+  check_projects:
+    runs-on: ubuntu-latest
+    env:
+      TEST_FOLDER: project_template_test
+    strategy:
+      matrix:
+        project:
+          [
+            actor/echo,
+            actor/echo-tinygo,
+            actor/hello,
+            interface/converter-actor,
+            interface/factorial,
+            provider/factorial,
+          ]
+        include:
+          - project: actor/echo
+            toolchain: rust
+          - project: actor/echo-tinygo
+            toolchain: tinygo
+          - project: actor/hello
+            toolchain: rust
+          - project: interface/rust
+            toolchain: rust
+          - project: provider/factorial
+            toolchain: rust
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+      - uses: wasmcloud/common-actions/install-wash@main
+      # Setup build toolchains
+      - name: Add wasm32-unknown-unknown
+        if: ${{ startswith(matrix.toolchain, 'rust') && startswith(matrix.project, 'actor') }} # Windows gets angry about not owning files if you restore from cache
+        run: rustup target add wasm32-unknown-unknown
+      - name: Setup tinygo
+        if: ${{ startswith(matrix.toolchain, 'tinygo') }}
+        run: |
+          wget https://github.com/tinygo-org/tinygo/releases/download/v0.23.0/tinygo_0.23.0_amd64.deb
+          sudo dpkg -i tinygo_0.23.0_amd64.deb
+      # Generate project and build
+      - name: Generate and build actor
+        if: ${{ startswith(matrix.project, 'actor') }}
+        run: |
+          wash new actor --path ${{ matrix.project }} ${{ env.TEST_FOLDER }} --silent
+          cd ${{ env.TEST_FOLDER }}
+          make
+      - name: Generate and build interface
+        if: ${{ startswith(matrix.project, 'interface') }}
+        run: |
+          wash new interface --path ${{ matrix.project }} ${{ env.TEST_FOLDER }} --silent
+          cd ${{ env.TEST_FOLDER }}
+          make
+      - name: Generate and build provider
+        if: ${{ startswith(matrix.project, 'provider') }}
+        run: |
+          wash new provider --path ${{ matrix.project }} ${{ env.TEST_FOLDER }} --silent
+          cd ${{ env.TEST_FOLDER }}
+          make
