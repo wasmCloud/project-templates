@@ -14,14 +14,14 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 async-trait = "0.1"
-serde = { version = "1.0" , features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
 serde_bytes = "0.11.5"
-wasmbus-rpc = "0.8.2"
+wasmbus-rpc = "0.9"
 
 [dev-dependencies]
 base64 = "0.13"
 
 # build-dependencies needed for build.rs
 [build-dependencies]
-weld-codegen = "0.4.2"
+weld-codegen = "0.4.6"
 
