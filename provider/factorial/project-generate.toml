@@ -3,9 +3,13 @@ rename = [
   { from="tests/factorial_test.rs", to="tests/{{to_snake_case project-name}}_test.rs" },
 ]
 
+raw = [
+  ".github/workflows/build.yml",
+  ".github/workflows/release.yml",
+]
+
 [[placeholders]]
 name = "vendor_name"
 type = "string"
 prompt = "Vendor name?"
 default = "Acme"
-

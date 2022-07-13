@@ -1,7 +1,6 @@
 //! {{ project-name }} capability provider
 //!
 //!
-use log::debug;
 use wasmbus_rpc::provider::prelude::*;
 use wasmcloud_interface_factorial::{Factorial, FactorialReceiver};
 
@@ -10,7 +9,7 @@ use wasmcloud_interface_factorial::{Factorial, FactorialReceiver};
 // and returns only when it receives a shutdown message
 //
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    provider_main({{ to_pascal_case project-name }}Provider::default())?;
+    provider_main({{ to_pascal_case project-name }}Provider::default(), Some("{{ to_pascal_case project-name }}".to_string()))?;
 
     eprintln!("{{ project-name }} provider exiting");
     Ok(())
@@ -30,7 +29,7 @@ impl ProviderHandler for {{ to_pascal_case project-name }}Provider {}
 impl Factorial for {{ to_pascal_case project-name }}Provider {
     /// accepts a number and calculates its factorial
     async fn calculate(&self, _ctx: &Context, req: &u32) -> RpcResult<u64> {
-        debug!("processing request calculat({})", *req);
+        debug!("processing request calculate ({})", *req);
         Ok(n_factorial(*req))
     }
 }

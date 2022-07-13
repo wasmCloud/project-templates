@@ -64,7 +64,7 @@ jobs:
           files: build/*.wasm
           token: ${{ env.WASMCLOUD_PAT }}
           body_path: release.txt
-          prerelease: true
+          prerelease: false
           draft: false
 
   artifact_release:
