@@ -29,7 +29,7 @@ impl ProviderHandler for {{ to_pascal_case project-name }}Provider {}
 impl Factorial for {{ to_pascal_case project-name }}Provider {
     /// accepts a number and calculates its factorial
     async fn calculate(&self, _ctx: &Context, req: &u32) -> RpcResult<u64> {
-        debug!("processing request calculate ({})", *req);
+        log::debug!("processing request calculate ({})", *req);
         Ok(n_factorial(*req))
     }
 }
