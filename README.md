@@ -11,5 +11,3 @@ Try one of the these to start:
 The wash command has additional online help. Add `--help` to get more
 information about any command and its available options.
 
-
-
