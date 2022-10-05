@@ -1,5 +1,5 @@
 use wasmbus_rpc::actor::prelude::*;
-use wasmcloud_interface_httpserver::{HttpRequest, HttpResponse};
+use wasmcloud_interface_httpserver::{HttpRequest, HttpResponse, HttpServer, HttpServerReceiver};
 
 #[derive(Debug, Default, Actor, HealthResponder)]
 #[services(Actor, HttpServer)]
