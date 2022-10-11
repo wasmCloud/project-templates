@@ -8,15 +8,10 @@ struct {{to_pascal_case project-name}}Actor {}
 /// Implementation of HttpServer trait methods
 #[async_trait]
 impl HttpServer for {{to_pascal_case project-name}}Actor {
-
     /// Returns a greeting, "Hello World", in the response body.
     /// If the request contains a query parameter 'name=NAME', the
     /// response is changed to "Hello NAME"
-    async fn handle_request(
-        &self,
-        _ctx: &Context,
-        req: &HttpRequest,
-    ) -> std::result::Result<HttpResponse, RpcError> {
+    async fn handle_request(&self, _ctx: &Context, req: &HttpRequest) -> RpcResult<HttpResponse> {
         let text = form_urlencoded::parse(req.query_string.as_bytes())
             .find(|(n, _)| n == "name")
             .map(|(_, v)| v.to_string())
