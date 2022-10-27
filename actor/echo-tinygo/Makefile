@@ -9,12 +9,15 @@ UNSIGNED = build/${ACTOR}.wasm
 OCI_URL  = localhost:5000/${ACTOR}_s:${VERSION}
 # if OCI_URL is localhost (and/or with no tls enabled), add --insecure to PUSH_FLAGS
 PUSH_FLAGS = --insecure
+#ACTOR_ALIAS =
 
 wasm: ${MODULE}
 
 ${MODULE}: ${UNSIGNED} Makefile
 	@mkdir -p $(shell dirname $@)
-	wash claims sign $< --destination $@ --name ${NAME} ${CLAIMS} -v ${VERSION}
+	wash claims sign $< --destination $@ --name ${NAME} ${CLAIMS} \
+	$(if $(ACTOR_ALIAS),--call-alias $(ACTOR_ALIAS)) \
+	-v ${VERSION}
 
 ${UNSIGNED}: $(wildcard *.go) go.mod Makefile
 	@mkdir -p $(shell dirname $@)
