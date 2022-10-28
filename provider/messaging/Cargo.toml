@@ -9,7 +9,7 @@ async-trait = "0.1"
 futures = "0.3"
 serde = {version = "1.0", features = ["derive"] }
 tracing = "0.1.37"
-wasmbus-rpc = "0.10.0"
+wasmbus-rpc = { version = "0.10.0", features = ["otel"] }
 wasmcloud-interface-messaging = "0.7.0"
 
 # test dependencies

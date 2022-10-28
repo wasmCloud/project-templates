@@ -1,7 +1,7 @@
-//! Implementation for wasmcloud:messaging.
+//! Implementation for wasmcloud:messaging
 //!
 use std::convert::Infallible;
-use tracing::debug;
+use tracing::{debug, instrument};
 use wasmbus_rpc::{core::LinkDefinition, provider::prelude::*};
 use wasmcloud_interface_messaging::{
     Messaging, MessagingReceiver, PubMessage, ReplyMessage, RequestMessage,
@@ -33,6 +33,7 @@ impl ProviderHandler for {{ to_pascal_case project-name }}Provider {
     /// Provider should perform any operations needed for a new link,
     /// including setting up per-actor resources, and checking authorization.
     /// If the link is allowed, return true, otherwise return false to deny the link.
+    #[instrument(level = "info", skip(self))]
     async fn put_link(&self, ld: &LinkDefinition) -> RpcResult<bool> {
         debug!("putting link for actor {:?}", ld);
 
@@ -40,6 +41,7 @@ impl ProviderHandler for {{ to_pascal_case project-name }}Provider {
     }
 
     /// Handle notification that a link is dropped: close the connection
+    #[instrument(level = "info", skip(self))]
     async fn delete_link(&self, actor_id: &str) {
         debug!("deleting link for actor {}", actor_id);
     }
@@ -53,11 +55,15 @@ impl ProviderHandler for {{ to_pascal_case project-name }}Provider {
 /// Handle Messaging methods
 #[async_trait]
 impl Messaging for {{ to_pascal_case project-name }}Provider {
-    async fn publish(&self, _ctx: &Context, _msg: &PubMessage) -> RpcResult<()> {
+    #[instrument(level = "debug", skip(self, msg), fields(subject = %msg.subject, reply_to = ?msg.reply_to, body_len = %msg.body.len()))]
+    async fn publish(&self, _ctx: &Context, msg: &PubMessage) -> RpcResult<()> {
+        debug!("Publishing message: {:?}", msg);
         Err(RpcError::NotImplemented)
     }
 
-    async fn request(&self, _ctx: &Context, _msg: &RequestMessage) -> RpcResult<ReplyMessage> {
+    #[instrument(level = "debug", skip(self, msg), fields(subject = %msg.subject))]
+    async fn request(&self, _ctx: &Context, msg: &RequestMessage) -> RpcResult<ReplyMessage> {
+        debug!("Sending message request: {:?}", msg);
         Err(RpcError::NotImplemented)
     }
 }
