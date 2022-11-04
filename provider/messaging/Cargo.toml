@@ -1,0 +1,21 @@
+[package]
+name = "{{ project-name }}"
+version = "0.1.0"
+edition = "2021"
+resolver = "2"
+
+[dependencies]
+async-trait = "0.1"
+futures = "0.3"
+serde = {version = "1.0", features = ["derive"] }
+tracing = "0.1.37"
+wasmbus-rpc = { version = "0.10.0", features = ["otel"] }
+wasmcloud-interface-messaging = "0.7.0"
+
+# test dependencies
+[dev-dependencies]
+wasmcloud-test-util = "0.5.0"
+
+[[bin]]
+name = "{{to_snake_case project-name}}"
+path = "src/main.rs"
