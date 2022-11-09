@@ -9,7 +9,6 @@ env:
   # For the release action, you'll have to set the following variables
   WASH_ISSUER_KEY: ${{ secrets.WASH_ISSUER_KEY }}
   WASMCLOUD_PAT: ${{ secrets.WASMCLOUD_PAT }}
-  #WASH_SUBJECT_KEY: ${{ secrets.WASH_SUBJECT_KEY }}
 
 jobs:
   build_signed_actor:
@@ -39,10 +38,9 @@ jobs:
          secret_suffix='_KEY'
          secret=${secret_prefix}${secret_unique}${secret_suffix}
          echo "SECRET_STRING=$secret" >> $GITHUB_ENV
-      - name: Pull Subject Key Secret
-        run: |
-         echo "WASH_SUBJECT_SECRET=${{ secrets.env.SECRET_STRING }}" >> $GITHUB_ENV
       - name: Build wasmcloud actor
+        env:
+          WASH_SUBJECT_KEY: ${{ secrets.WASH_SUBJECT_KEY }}
         run: make
         working-directory: ${{ env.WORKING_DIR }}
       - name: Upload signed actor to GH Actions
