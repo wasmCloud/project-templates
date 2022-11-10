@@ -138,9 +138,12 @@ jobs:
         with:
           name: ${{ env.ACTOR_NAME }}
           path: ${{ env.ACTOR_NAME }}/build
+      - name: Convert Repo Name to Lowercase # OCI Bug requirement
+        run: |
+         echo "REPO_LOWER=$(echo ${{ github.REPOSITORY }} | tr 'A-Z' 'a-z')" >> $GITHUB_ENV
       - name: Push Actor to GHCR
         env:
           WASH_REG_USER: ${{ github.repository_owner }}
           WASH_REG_PASSWORD: ${{ secrets.WASMCLOUD_PAT }}
         run: |
-          wash reg push ghcr.io/${{ env.WASH_REG_USER }}/${{ github.REPOSITORY }}/${{ env.ACTOR_NAME }}:${{ env.ACTOR_VERSION }} ${{ env.ACTOR_NAME }}/build/${{ env.ACTOR_NAME }}_s.wasm -a org.opencontainers.image.source=https://github.com/${{ github.REPOSITORY }} --allow-latest
+          wash reg push ghcr.io/${{ env.REPO_LOWER }}/${{ env.ACTOR_NAME }}:${{ env.ACTOR_VERSION }} ${{ env.ACTOR_NAME }}/build/${{ env.ACTOR_NAME }}_s.wasm -a org.opencontainers.image.source=https://github.com/${{ github.REPOSITORY }} --allow-latest
