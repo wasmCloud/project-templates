@@ -2,7 +2,6 @@ name: Release to GHCR
 on:
   workflow_dispatch:
   push:
-    branches: [main, monorepo-actor-dev]
     tags:
       - "*-v[0-9]+.[0-9]+.[0-9]+"
 env:
@@ -16,7 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       verification_output: ${{ steps.set_verified.outputs.verification }}
-    #   secret_output: 'place-holder'
+      actor_name_output: ${{ steps.set_actor_name.outputs.actor_name }}
+      actor_version_output: ${{ steps.set_actor_version.outputs.actor_version }}
     steps:
       - uses: actions/checkout@v2
       - uses: wasmcloud/common-actions/install-wash@main
@@ -24,7 +24,7 @@ jobs:
         run: rustup target add wasm32-unknown-unknown
       # Once you've written unit tests for your actor, you can uncomment
       # the two lines below to automatically run tests
-      # - name: Test actor
+      # - name: Test Actor
       #   run: cargo test --target x86_64-unknown-linux-gnu -- --nocapture
       - name: Extract Actor Name from Tag
         run: |
@@ -36,7 +36,7 @@ jobs:
           tag=${GITHUB_REF#refs/tags/*-v*/}
           version=`expr match "$tag" '.*\([0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\)'` 
           echo "ACTOR_VERSION=${version}" >> $GITHUB_ENV
-      - name: Set working Directory
+      - name: Set Working Directory
         run: |
           echo "WORKING_DIR=$PWD/actor/$ACTOR_NAME" >> $GITHUB_ENV
       - name: Determine Actor Name from Cargo
@@ -49,19 +49,10 @@ jobs:
           echo "VERIFY_ACTOR_VERSION=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[].version')" >> $GITHUB_ENV
       - name: Verify Cargo and Tag are in Sync
         run: |
-          if ${ACTOR_NAME} == ${VERIFY_ACTOR_NAME} && ${ACTOR_VERSION} == ${VERIFY_ACTOR_VERSION}; then
+          if [ "$ACTOR_NAME" = "$VERIFY_ACTOR_NAME" ] && [ "$ACTOR_VERSION" = "$VERIFY_ACTOR_VERSION" ]; then
             echo "VERIFIED=true" >> $GITHUB_ENV
           else
             echo "VERIFIED=false" >> $GITHUB_ENV
-          fi
-      - name: Set Verification Output
-        id: set_verified
-        run: |
-          if ${VERIFIED} == 'true'; then
-            echo "::set_output name=verification::true" >> $GITHUB_OUTPUT
-          else
-            echo "::set_output name=verification::false" >> $GITHUB_OUTPUT
-            echo "::error title=VerificationFailed::Cargo Version Does Not Match Tag Version"
           fi
       - name: Build Subject Key Secret String
         if: env.VERIFIED == 'true'
@@ -71,36 +62,53 @@ jobs:
          secret_suffix='_KEY'
          secret=${secret_prefix}${secret_unique}${secret_suffix}
          echo "SECRET_STRING=$secret" >> $GITHUB_ENV
-      - name: Build wasmcloud actor
+      - name: Build wasmCloud Actor
         if: env.VERIFIED == 'true'
         env:
           WASH_SUBJECT_KEY: ${{ secrets[env.SECRET_STRING] }}
         run: wash build
         working-directory: ${{ env.WORKING_DIR }}
-      - name: Upload signed actor to GH Actions
+      - name: Upload Signed Actor to GH Actions
         if: env.VERIFIED == 'true'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: $ACTOR_NAME
+          name: ${{ env.ACTOR_NAME }}
           path: ${{ env.WORKING_DIR }}/build/*.wasm
-
+          if-no-files-found: error
+      - name: Output Verification Status
+        id: set_verified
+        run: |
+          if [ "$VERIFIED" = "true" ] ; then
+            echo "verification=true" >> $GITHUB_OUTPUT
+          else
+            echo "verification=false" >> $GITHUB_OUTPUT
+            echo "::error title=VerificationFailed::Cargo Version Does Not Match Tag Version"
+          fi
+      - name: Output Actor Name
+        id: set_actor_name
+        run: echo "actor_name=$ACTOR_NAME" >> $GITHUB_OUTPUT
+      - name: Output Actor Version
+        id: set_actor_version
+        run: echo "actor_version=$ACTOR_VERSION" >> $GITHUB_OUTPUT
 
   github_release:
-    if: needs.build_signed_actor.outputs.verification_output == 'true'
     needs: build_signed_actor
+    if: needs.build_signed_actor.outputs.verification_output == 'true'
     runs-on: ubuntu-latest
+    env:
+      ACTOR_NAME: ${{ needs.build_signed_actor.outputs.actor_name_output }}
     steps:
       - uses: actions/checkout@v2
       - uses: wasmcloud/common-actions/install-wash@main
-      - name: Download signed actor
-        uses: actions/download-artifact@v2
+      - name: Download Signed Actor
+        uses: actions/download-artifact@v3
         with:
-          name: wasmcloud-actor
-          path: build
-      - name: Create release text
+          name: ${{ env.ACTOR_NAME }}
+          path: ${{ env.ACTOR_NAME }}/build
+      - name: Create Release Text
         run: |
           export oci_version=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[].version')
-          export claims=$(wash claims inspect build/*.wasm)
+          export claims=$(wash claims inspect $ACTOR_NAME/build/*.wasm)
           echo "Your actor can be accessed at \`ghcr.io/${{ github.REPOSITORY }}:$oci_version\`" >> release.txt
           echo "Claims information:" >> release.txt
           echo "\`\`\`" >> release.txt
@@ -109,38 +117,30 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: build/*.wasm
+          files: ${{ env.ACTOR_NAME }}/build/*.wasm
           token: ${{ env.WASMCLOUD_PAT }}
           body_path: release.txt
           prerelease: false
           draft: false
 
   artifact_release:
-    if: needs.build_signed_actor.outputs.verification_output == 'true'
     needs: build_signed_actor
+    if: needs.build_signed_actor.outputs.verification_output == 'true'
     runs-on: ubuntu-latest
+    env:
+      ACTOR_NAME: ${{ needs.build_signed_actor.outputs.actor_name_output }}
+      ACTOR_VERSION: ${{ needs.build_signed_actor.outputs.actor_version_output }}
     steps:
       - uses: actions/checkout@v2
       - uses: wasmcloud/common-actions/install-wash@main
-      - name: Download signed actor
-        uses: actions/download-artifact@v2
+      - name: Download Signed Actor
+        uses: actions/download-artifact@v3
         with:
-          name: wasmcloud-actor
-          path: build
-      - name: Determine actor name
-        run: |
-          echo "actor-name=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[].name')" >> $GITHUB_ENV
-      - name: Determine actor version
-        if: startswith(github.ref, 'refs/tags/') # Only run on tag push
-        run: |
-          echo "actor-version=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[].version')" >> $GITHUB_ENV
-      - name: Determine actor version (main)
-        if: ${{ !startswith(github.ref, 'refs/tags/') }}
-        run: |
-          echo "actor-version=latest" >> $GITHUB_ENV
-      - name: Push actor to GHCR
+          name: ${{ env.ACTOR_NAME }}
+          path: ${{ env.ACTOR_NAME }}/build
+      - name: Push Actor to GHCR
         env:
           WASH_REG_USER: ${{ github.repository_owner }}
           WASH_REG_PASSWORD: ${{ secrets.WASMCLOUD_PAT }}
         run: |
-          wash reg push ghcr.io/${{ github.REPOSITORY }}:${{ env.actor-version }} build/${{ env.actor-name }}_s.wasm -a org.opencontainers.image.source=https://github.com/${{ github.REPOSITORY }} --allow-latest
+          wash reg push ghcr.io/${{ env.WASH_REG_USER }}/${{ github.REPOSITORY }}/${{ env.ACTOR_NAME }}:${{ env.ACTOR_VERSION }} ${{ env.ACTOR_NAME }}/build/${{ env.ACTOR_NAME }}_s.wasm -a org.opencontainers.image.source=https://github.com/${{ github.REPOSITORY }} --allow-latest
