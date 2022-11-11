@@ -23,10 +23,6 @@ jobs:
       - uses: wasmcloud/common-actions/install-wash@main
       - name: Add wasm32-unknown-unknown
         run: rustup target add wasm32-unknown-unknown
-      # Once you've written unit tests for your actor, you can uncomment
-      # the two lines below to automatically run tests
-      # - name: Test Actor
-      #   run: cargo test --target x86_64-unknown-linux-gnu -- --nocapture
       - name: Extract Actor Name from Tag
         run: |
           tag=${GITHUB_REF#refs/tags/*-v*/}
@@ -63,6 +59,11 @@ jobs:
          secret_suffix='_KEY'
          secret=${secret_prefix}${secret_unique}${secret_suffix}
          echo "SECRET_STRING=$secret" >> $GITHUB_ENV
+            # Once you've written unit tests for your actor, you can uncomment
+      # the two lines below to automatically run tests
+      # - name: Test Actor
+      #   run: cargo test --target x86_64-unknown-linux-gnu -- --nocapture
+      #   working-directory: ${{ env.WORKING_DIR }}
       - name: Build wasmCloud Actor
         if: env.VERIFIED == 'true'
         env:
