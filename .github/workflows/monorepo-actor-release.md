@@ -1,10 +1,10 @@
-# Using the Monorepo Release Workflow
+# Using the Monorepo Actor Release Workflow
 
 ## Setup
 
 Copy this workflow into your `.github/workflows` directory at the root of your project.
 
-Actors should be created within an `actor` directory at the root of your project.
+Actors should be created within an `actor` directory at the root of your project. When creating an actor use the `--no-git-init` flag with `wash new actor`, or delete the `.git` directory within the actor. 
 
 A GitHub repository or environment secret must be created for each actor in the format `WASH_$ACTORNAME_SECRET`.
 

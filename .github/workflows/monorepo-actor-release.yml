@@ -1,4 +1,4 @@
-name: Release to GHCR
+name: Release Monorepo Actor to GHCR
 on:
   workflow_dispatch:
   push:
