@@ -6,14 +6,14 @@ resolver = "2"
 
 [dependencies]
 async-trait = "0.1"
-wasmbus-rpc = "0.10"
-wasmcloud-interface-factorial = "0.6"
-wasmcloud-interface-httpserver = "0.7"
+wasmbus-rpc = "0.11"
+wasmcloud-interface-factorial = "0.7"
+wasmcloud-interface-httpserver = "0.8"
 
 # test dependencies
 [dev-dependencies]
-wasmcloud-test-util = "0.5.0"
-tokio = { version = "1.0", features = [ "full" ] }
+wasmcloud-test-util = "0.6"
+tokio = { version = "1", features = [ "full" ] }
 
 [[bin]]
 name = "{{to_snake_case project-name}}"
