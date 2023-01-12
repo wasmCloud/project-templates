@@ -1,12 +1,12 @@
 [package]
-name = "echo-messaging"
+name = "{{project-name}}"
 version = "0.1.0"
 authors = [ "" ]
 edition = "2021"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
-name = "echo_messaging"
+name = "{{to_snake_case project-name}}"
 
 [dependencies]
 futures = "0.3"
@@ -18,3 +18,4 @@ wasmcloud-interface-messaging = "0.8"
 # Optimize for small code size
 lto = true
 opt-level = "s"
+strip = true

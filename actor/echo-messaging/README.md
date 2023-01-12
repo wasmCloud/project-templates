@@ -1,10 +1,10 @@
 # {{project-name}}
 
-This actor echoes messages received in an HttpRequest.
-It is linked to the http server provider wasmcloud:httpserver.
+This actor echoes messages received in a `SubMessage`. It is linked to the NATS
+messaging provider with the contract `wasmcloud:messaging`.
 
-For each http request, the actor returns a json-formatted
-string containing fields from the request.
+For each incoming NATS message, the actor echoes the bytes back out to the
+`reply_to` topic on the message
 
 ### Using the included Github Actions
 If you store your source code on Github, we've gone ahead and included two actions: `build.yml` and `release.yml` under `.github/workflows`. The build action will automatically build, lint, and check formatting for your actor. The release action will automatically release a new version of your actor whenever code is pushed to `main`, or when you push a tag with the form `vX.Y.Z`. 

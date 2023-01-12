@@ -3,10 +3,10 @@ use wasmcloud_interface_messaging::*;
 
 #[derive(Debug, Default, Actor, HealthResponder)]
 #[services(Actor, MessageSubscriber)]
-struct EchoMessagingActor {}
+struct {{to_pascal_case project-name}}Actor {}
 
 #[async_trait]
-impl MessageSubscriber for EchoMessagingActor {
+impl MessageSubscriber for {{to_pascal_case project-name}}Actor {
     /// handle subscription response
     async fn handle_message(&self, ctx: &Context, msg: &SubMessage) -> RpcResult<()> {
         // if the sender wants a reply

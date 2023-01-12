@@ -1,7 +1,8 @@
-name = "{{project-name}}"
+name = "{{to_snake_case project-name}}"
 language = "rust"
 type = "actor"
 version = "0.1.0"
 
 [actor]
 claims = ["wasmcloud:messaging"]
+wasm_target = "wasm32-wasi"
