@@ -1,57 +1,27 @@
 # {{ project-name }} Actor
 
-This project implements an actor that returns a greeting.
-
-Upon receiving an http request, the actor returns "Hello World".
-The response can be customized by adding an http query parameter 'name'.
-For example, if the http server is running on localhost port 8000,
-the command
-
-```bash
-curl "localhost:8000/?name=Alice"
-```
-
-returns "Hello Alice".
+This actor makes use of a single capability, `wasmcloud:httpserver`, in order to receive HTTP requests and respond with the classic "Hello, World!".
 
 ## The implementation
 
 To respond to http requests, the actor must implement the
-`httpResponse` method of the
+`HttpResponse` method of the
 [HttpServer interface](https://github.com/wasmCloud/interfaces/tree/main/httpserver) interface.
 
 The implementation is in the file [src/lib.rs](./src/lib.rs)
 
 ## See it in action
 
-- To compile the actor and generate a signed Webassembly module, type `make`.
-- To load and start the actor you'll need to have a running OCI-compatible
-registry. Check that `REG_URL` setting in Makefile is correct, and run
-`make push` and `make start` to push the actor to the registry
-and start the actor.
-Alternately, you can load and start the actor from the host's web ui.
-When prompted for the path,
-select `build/{{to_snake_case project-name}}_s.wasm`.
-
-The actor must be linked with an HttpServer capability
-provider with the contract id `wasmcloud:httpserver`. You can start the
-provider (TODO: need registry url and more specific instructions here)
-
-Your actor can be invoked from a terminal command-line or from a web browser.
-The following examples assume the http server is listening on localhost port 8000.
-
-### In a terminal
-
-```bash
-curl localhost:8000
-
-curl "localhost:8000/?name=Alice"
-```
-
-(note the quotes in the second example)
+- To compile the actor and generate a signed Webassembly module, type `wash build`.
+- Run the wasmCloud host with `wash up`
+- In your browser at `localhost:4000`, in the **Actors** table, use the dropdown to start the actor **From File** and select the built and signed module from step 1
+- Start the HTTP server provider **From Registry** with OCI reference `wasmcloud.azurecr.io/httpserver:0.17.0`
+- Link your hello actor to the HTTP server provider with a link value of `address=0.0.0.0:8080`
+- `curl localhost:8080` to see your response, or follow the browser instructions below
 
 ### In a browser
 
-visit the url "http://localhost:8000" or "http://localhost:8000/?name=Alice"
+Visit the url "http://localhost:8000" to see your response in the browser.
 
 ## How do I customize this template to use other contracts & interfaces?
 
