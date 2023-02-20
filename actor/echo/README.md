@@ -9,7 +9,7 @@ string containing fields from the request.
 ## How do I customize this template to use other contracts & interfaces?
 
 - You can change what contracts this actor claims in `wasmcloud.toml` and the `Makefile`. In the future this will just be in `wasmcloud.toml`.
-- You will then need to change the dependencies in `Cargo.toml` to import the interfaces for the contracts you want. Optionally delete the `wasmcloud-interface-httpserver` dep if you're not using that contract.
+- You will then need to change the dependencies in `Cargo.toml` to import the interfaces for the contracts you want. Delete the `wasmcloud-interface-httpserver` dep if you're not using that contract.
 - Finally, change the `src/lib.rs` file, changing/deleting the current interface import and `impl` block, while adding a new import & `impl` for any contracts you added!
 
 ### Using the included Github Actions
