@@ -43,11 +43,11 @@ It should print the response "hello" on your console.
 
 - You can change what contracts this actor claims in `wasmcloud.toml` and the `Makefile`. In the future this will just be in `wasmcloud.toml`.
 - You will then need to change the dependencies in `go.mod` to import the interfaces for the contracts you want. Optionally delete the `github.com/wasmcloud/interfaces/httpserver/tinygo` dep if you're not using that contract.
-- Finally change the `echo.go` file, changing/deleting the current interface import, `HttpServerHandler`, and `HandleRequest` function, while adding a new import & `Handler` & implementation function for any contracts you added!
+- Finally, change the `echo.go` file, changing/deleting the current interface import, `HttpServerHandler`, and `HandleRequest` function, while adding a new import & `Handler` & implementation function for any contracts you added!
 
 ### Using the included Github Actions
 
-If you store your source code on Github, we've gone ahead and included two actions: `build.yml` and `release.yml` under `.github/workflows`. The build action will automatically build, lint, and check formatting for your actor. The release action will automatically release a new version of your actor whenever code is pushed to `main`, or when you push a tag with the form `vX.Y.Z`.
+The generated project include two GitHub actions: `build.yml` and `release.yml` under `.github/workflows`. The build action will automatically build, lint, and check formatting for your actor. The release action will automatically release a new version of your actor whenever code is pushed to `main`, or when you push a tag with the form `vX.Y.Z`.
 
 These actions require 3 secrets
 

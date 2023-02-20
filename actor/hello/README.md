@@ -29,10 +29,10 @@ registry. Check that `REG_URL` setting in Makefile is correct, and run
 `make push` and `make start` to push the actor to the registry
 and start the actor.
 Alternately, you can load and start the actor from the host's web ui.
-When prompted for the path, 
+When prompted for the path,
 select `build/{{to_snake_case project-name}}_s.wasm`.
 
-The actor must be linked with an HttpServer capability 
+The actor must be linked with an HttpServer capability
 provider with the contract id `wasmcloud:httpserver`. You can start the
 provider (TODO: need registry url and more specific instructions here)
 
@@ -57,11 +57,11 @@ visit the url "http://localhost:8000" or "http://localhost:8000/?name=Alice"
 
 - You can change what contracts this actor claims in `wasmcloud.toml` and the `Makefile`. In the future this will just be in `wasmcloud.toml`.
 - You will then need to change the dependencies in `Cargo.toml` to import the interfaces for the contracts you want. Optionally delete the `wasmcloud-interface-httpserver` dep if you're not using that contract.
-- Finally change the `src/lib.rs` file, changing/deleting the current interface import and `impl` block, while adding a new import & `impl` for any contracts you added!
+- Finally, change the `src/lib.rs` file, changing/deleting the current interface import and `impl` block, while adding a new import & `impl` for any contracts you added!
 
 ### Using the included Github Actions
 
-If you store your source code on Github, we've gone ahead and included two actions: `build.yml` and `release.yml` under `.github/workflows`. The build action will automatically build, lint, and check formatting for your actor. The release action will automatically release a new version of your actor whenever code is pushed to `main`, or when you push a tag with the form `vX.Y.Z`.
+The generated project include two GitHub actions: `build.yml` and `release.yml` under `.github/workflows`. The build action will automatically build, lint, and check formatting for your actor. The release action will automatically release a new version of your actor whenever code is pushed to `main`, or when you push a tag with the form `vX.Y.Z`.
 
 These actions require 3 secrets
 
