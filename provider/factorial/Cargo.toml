@@ -9,7 +9,7 @@ async-trait = "0.1"
 tracing = "0.1.37"
 wasmbus-rpc = "0.11"
 wasmcloud-interface-factorial = "0.7"
-wasmcloud-interface-httpserver = "0.8"
+wasmcloud-interface-httpserver = "0.9"
 
 # test dependencies
 [dev-dependencies]
