@@ -3,4 +3,10 @@
 raw = [
   ".github/workflows/build.yml",
   ".github/workflows/release.yml",
+  "build/kvcounter.wasm"
 ]
+exclude = [
+  "/.idea"
+]
+
+
