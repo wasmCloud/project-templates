@@ -5,11 +5,11 @@ use wasmcloud_interface_httpserver::{HttpRequest, HttpResponse, HttpServer, Http
 #[services(Actor, HttpServer)]
 struct {{to_pascal_case project-name}}Actor {}
 
-/// Implementation of the HTTP server capability
+/// Implementation of the HttpServer capability contract
 #[async_trait]
 impl HttpServer for {{to_pascal_case project-name}}Actor {
     async fn handle_request(&self, _ctx: &Context, _req: &HttpRequest) -> RpcResult<HttpResponse> {
-        HttpResponse::ok("Hello, World!")
+        Ok(HttpResponse::ok("Hello, World!"))
     }
 }
 
