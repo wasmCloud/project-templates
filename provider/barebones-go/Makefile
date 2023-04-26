@@ -21,6 +21,7 @@ sign:
 	wash par insert --arch aarch64-macos  --binary dist/$(PROJECT)_darwin_arm64/$(PROJECT)   dist/$(PROJECT).par.gz
 	wash par insert --arch x86_64-linux   --binary dist/$(PROJECT)_linux_amd64_v1/$(PROJECT) dist/$(PROJECT).par.gz
 	wash par insert --arch aarch64-linux  --binary dist/$(PROJECT)_linux_arm64/$(PROJECT)    dist/$(PROJECT).par.gz
+	wash par insert --arch x86_64-windows --binary dist/$(PROJECT)_windows_amd64_v1/$(PROJECT).exe dist/$(PROJECT).par.gz
 	wash par inspect dist/$(PROJECT).par.gz
 
 test:
