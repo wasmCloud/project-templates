@@ -18,5 +18,5 @@ default = "wasmcloud:httpserver"
 [[placeholders]]
 name = "go_mod_prefix"
 type = "string"
-prompt = "Go Module name prefix (will add name to end)?"
+prompt = "Go Module name prefix? (will add name to end)"
 default = "github.com/wasmcloud"
