@@ -10,8 +10,8 @@ name = "{{to_snake_case project-name}}"
 
 [dependencies]
 futures = "0.3"
-wasmbus-rpc = "0.13"
-wasmcloud-interface-httpserver = "0.10"
+wasmbus-rpc = "0.14"
+wasmcloud-interface-httpserver = "0.11"
 
 [profile.release]
 # Optimize for small code size
