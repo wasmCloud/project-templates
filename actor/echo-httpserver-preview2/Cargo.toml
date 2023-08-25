@@ -1,21 +1,23 @@
 [package]
-name = "{{project-name}}"
+name = "test"
+#name = "{{project-name}}"
 version = "0.1.0"
 authors = [ "" ]
 edition = "2021"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
-name = "{{to_snake_case project-name}}"
+#name = "{{to_snake_case project-name}}"
 
 [dependencies]
 futures = "0.3"
+http = "0.2.9"
+serde = { version = "1.0.186", features = ["derive"] }
 serde_json = "1.0"
 wasmbus-rpc = "0.14"
-wasmcloud-interface-httpserver = "0.11"
 wasmcloud-actor = { git = "https://github.com/wasmCloud/wasmCloud.git", version = "0.1.0", features = [ "component", "rand", "uuid" ] }
+wasmcloud-interface-httpserver = "0.11"
 wit-bindgen = "0.10.0"
-rmp-serde = "1.1.2"
 
 [profile.release]
 # Optimize for small code size

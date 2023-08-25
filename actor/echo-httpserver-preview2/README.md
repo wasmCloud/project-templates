@@ -1,7 +1,7 @@
 # {{project-name}}
 
 This actor demonstrates [WASI preview2][wasi-preview2] and [Component Model][cm] support in wasmCloud.
-It uses the [WIT][wit]-ified [`wasmcloud/bus` interface][wit-wasmcloud/bus] to respond to requests from a [`httpserver` capability provider][provider-httpserver].
+It uses the [WIT][wit]-ified [slightly modified version of the `wasi:http/incoming-handler` interface][wit-wasmcloud/bus] to respond to requests from a [`httpserver` capability provider][provider-httpserver].
 
 For each incoming request, the actor component will respond with information detailing the request it received -- effectively "echo"ing the request.
 
