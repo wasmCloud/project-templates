@@ -44,10 +44,10 @@ impl IncomingHandler for EchoActor {
 
         // Retrieve path & query
         let path_and_query = incoming_request_path_with_query(request)
-                .expect("failed to retrieve path and query from request");
+            .expect("failed to retrieve path and query from request");
 
         let paq = http::uri::PathAndQuery::from_maybe_shared(path_and_query)
-        .expect("failed to parse path & query");
+            .expect("failed to parse path & query");
 
         // Retreive headers
         let headers: HashMap<String, String> = fields_entries(incoming_request_headers(request))
@@ -91,7 +91,7 @@ impl Method {
             Method::Head => "HEAD",
             Method::Options => "OPTIONS",
             Method::Trace => "TRACE",
-            Method::Other(s) => &s,
+            Method::Other(s) => s,
         }
     }
 }
