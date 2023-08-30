@@ -24,7 +24,7 @@ wash build
 You should see output similar to the following:
 
 ```
-Actor built and signed and can be found at "/home/mrman/code/work/cosmonic/forks/project-templates/actor/echo-httpserver-preview2/build/<your actor name>_s.wasm"
+Actor built and signed and can be found at "/home/youruser/coolactor/build/<your actor name>_s.wasm"
 ```
 
 ### 🪪 Get your signed Actor ID
@@ -64,7 +64,7 @@ wash start actor <actor id> --host-id <ID of your rust host>
 After running `wash start` you should see output like the following:
 
 ```
-Actor [MA5Z5BFS2HB2NAIZNAG7JOCXVQKXQ2KPS422WI6OMQPTXIJVKGAUJXFN] (ref: [file:///home/mrman/code/work/cosmonic/forks/project-templates/actor/echo-httpserver-preview2/build/<your project>_s.wasm]) started on host [NDXXFJVVCYNUGVOPYUWTJIREYLRVHAYV4AUW46EG2Y2LHMK53SVUZHCC]
+Actor [MA5Z5BFS2HB2NAIZNAG7JOCXVQKXQ2KPS422WI6OMQPTXIJVKGAUJXFN] (ref: [file:///home/youruser/coolactor/build/<your project>_s.wasm]) started on host [NDXXFJVVCYNUGVOPYUWTJIREYLRVHAYV4AUW46EG2Y2LHMK53SVUZHCC]
 ```
 
 [wasmcloud/wasmcloud]: https://github.com/wasmCloud/wasmCloud
@@ -74,7 +74,7 @@ Actor [MA5Z5BFS2HB2NAIZNAG7JOCXVQKXQ2KPS422WI6OMQPTXIJVKGAUJXFN] (ref: [file:///
 Start a [`httpserver`][provider-httpserver] provider:
 
 ```console
-wash start provider wasmcloud.azurecr.io/httpserver:0.17.0
+wash start provider wasmcloud.azurecr.io/httpserver:0.19.1
 ```
 
 ### ⛓  Link the actor and provider
