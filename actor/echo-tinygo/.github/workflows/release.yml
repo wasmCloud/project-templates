@@ -18,7 +18,7 @@ jobs:
   build_signed_actor:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: wasmcloud/common-actions/install-wash@main
       - name: Setup tinygo
         run: |
@@ -34,7 +34,7 @@ jobs:
           WASH_SUBJECT_KEY: ${{ env.WASH_SUBJECT_KEY }}
         run: wash build
       - name: Upload signed actor to GH Actions
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: wasmcloud-actor
           path: build/*_s.wasm
@@ -44,10 +44,10 @@ jobs:
     needs: build_signed_actor
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: wasmcloud/common-actions/install-wash@main
       - name: Download signed actor
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: wasmcloud-actor
           path: build
@@ -73,10 +73,10 @@ jobs:
     needs: build_signed_actor
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: wasmcloud/common-actions/install-wash@main
       - name: Download signed actor
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: wasmcloud-actor
           path: build
