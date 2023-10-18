@@ -28,7 +28,7 @@ jobs:
           - x86_64-pc-windows-gnu
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: wasmcloud/common-actions/install-cross@main
       - name: Determine artifact name
         run: |
@@ -49,7 +49,7 @@ jobs:
     needs: [build_provider_targets]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: wasmcloud/common-actions/install-wash@main
       # Downloads all provider artifacts
       - uses: actions/download-artifact@v3
@@ -69,7 +69,7 @@ jobs:
           wash par insert --arch armv7-linux    --binary armv7-unknown-linux-gnueabihf/${{ env.artifact-name }} build/${{ env.artifact-name }}.par.gz
           wash par insert --arch x86_64-windows --binary x86_64-pc-windows-gnu/${{ env.artifact-name }}.exe build/${{ env.artifact-name }}.par.gz
       - name: Upload provider archive to GH Actions
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: provider-archive
           path: build/${{ env.artifact-name }}.par.gz
@@ -79,7 +79,7 @@ jobs:
     needs: [assemble_provider_archive]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: wasmcloud/common-actions/install-wash@main
       - name: Download provider archive
         uses: actions/download-artifact@v3
@@ -108,7 +108,7 @@ jobs:
     needs: [assemble_provider_archive]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: wasmcloud/common-actions/install-wash@main
       - name: Download provider archive
         uses: actions/download-artifact@v3
