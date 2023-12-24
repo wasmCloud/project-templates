@@ -7,9 +7,9 @@ resolver = "2"
 [dependencies]
 async-trait = "0.1"
 tracing = "0.1.37"
-wasmbus-rpc = { version = "0.14", features = ["otel"] }
-wasmcloud-interface-factorial = "0.9"
-wasmcloud-interface-httpserver = "0.11"
+wasmbus-rpc = { version = "0.15", features = ["otel"] }
+wasmcloud-interface-factorial = "0.10"
+wasmcloud-interface-httpserver = "0.12"
 
 # test dependencies
 [dev-dependencies]
