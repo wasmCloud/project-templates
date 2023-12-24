@@ -20,8 +20,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: wasmcloud/common-actions/install-wash@main
-      - name: Add wasm32-unknown-unknown
-        run: rustup target add wasm32-unknown-unknown
+      - name: Add wasm32-wasi
+        run: rustup target add wasm32-wasi
       # Once you've written unit tests for your actor, you can uncomment
       # the two lines below to automatically run tests
       # - name: Test actor
