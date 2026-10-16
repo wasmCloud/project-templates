@@ -1,3 +1,7 @@
+> [!WARNING]
+> This repository is archived and is no longer maintained. It receives no bug fixes or security updates.
+> Current templates live in [wasmCloud/wasmCloud](https://github.com/wasmCloud/wasmCloud/tree/main/templates), [wasmCloud/go](https://github.com/wasmCloud/go), and [wasmCloud/typescript](https://github.com/wasmCloud/typescript).
+
 # wasmCloud project templates
 
 This repository contains some project templates that you can use
